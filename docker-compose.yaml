@@ -1,0 +1,115 @@
+# Note: 192.168.123.xxx is an example network, you must update all these to match your own.
+
+version: '2.1'
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    hostname: pihole
+    domainname: home.indiegigs.com             # <-- Update
+    cap_add:
+      - NET_ADMIN
+    networks:
+      docker_network:
+        ipv4_address: 192.168.1.3   # <-- Update
+#        ipv6_address: 2a02:8010:6253:0:0:0:1:2
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
+    ports:
+      - 443/tcp
+      - 53/tcp
+      - 53/udp
+      - 67/udp
+      - 80/tcp
+    environment:
+      ServerIP: 192.168.1.3         # <-- Update (match ipv4_address)
+ #     ServerIPv6: 2a02:8010:6253:0:0:0:1:2
+      VIRTUAL_HOST: pihole.home.indiegigs.com  # <-- Update (match hostname + domainname)
+      WEBPASSWORD: ""                   # <-- Add password (if required)
+    volumes:
+      - ../pihole/resolv.conf:/etc/resolv.conf
+      - ../pihole/data:/etc/pihole
+    restart: unless-stopped
+  unifi:
+     container_name: unifi-controller
+     image: jacobalberty/unifi
+     hostname: unifi
+     domainname: home.indiegigs.com             # <-- Update
+     cap_add:
+       - NET_ADMIN
+     networks:
+      docker_network:
+        ipv4_address: 192.168.1.4   #M-BM- <-- Update
+     dns:
+      - 127.0.0.1
+      - 8.8.8.8
+     ports:
+      - 443/tcp
+      - 80/tcp
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    links:
+      - node-exporter
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=900d"
+  node-exporter:
+    privileged: true
+    image: prom/node-exporter
+    container_name: node-exporter
+    restart: always
+    network_mode: host
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /volume1:/volume1:ro
+    command:
+      - "--log.level=debug"
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points"
+      - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
+  mythtv:
+     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
+     container_name: mythtv
+     restart: always
+     networks:
+      docker_network:
+        ipv4_address: 192.168.1.2
+     cap_add:
+        - NET_ADMIN
+     volumes:
+        - /volume1/mythtv:/mnt/nfs/mythtv2
+        - ./secrets/mythtv-db-password:/run/secrets/mythtv-db-password:ro
+     environment:
+        - DBNAME=mythconverg
+        - DBSERVER=192.168.1.5
+     ports:
+        - 80/tcp
+        - 6544/tcp
+        - 6760/tcp
+
+networks:
+  docker_network:
+    enable_ipv6: false
+    driver: macvlan
+    driver_opts:
+      parent: eth1
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24            # <-- Update
+          gateway: 192.168.1.1              # <-- Update
+          ip_range: 192.168.1.3/28        # <-- Update
+       # - subnet: 2a02:8010:6253:0:0:0:1:1/48
