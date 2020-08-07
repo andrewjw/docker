@@ -5,7 +5,7 @@ version: '2.1'
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
+    image: pihole/pihole:4.3.2
     hostname: pihole
     domainname: home.indiegigs.com             # <-- Update
     cap_add:
@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi
+     image: jacobalberty/unifi:5.12.35
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
      cap_add:
@@ -49,7 +49,7 @@ services:
       - 443/tcp
       - 80/tcp
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.19.0
     container_name: prometheus
     restart: always
     links:
@@ -64,7 +64,7 @@ services:
       - "--storage.tsdb.retention.time=900d"
   node-exporter:
     privileged: true
-    image: prom/node-exporter
+    image: prom/node-exporter:v1.0.1
     container_name: node-exporter
     restart: always
     network_mode: host
