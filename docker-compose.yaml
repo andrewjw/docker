@@ -100,6 +100,24 @@ services:
         - 80/tcp
         - 6544/tcp
         - 6760/tcp
+  teslamate:
+    image: teslamate/teslamate:1.19.4
+    container_name: teslamate
+    restart: always
+    environment:
+      - DATABASE_HOST=192.168.1.6
+      - MQTT_HOST=mosquitto
+    env_file:
+      - ./secrets/teslamate
+    networks:
+      docker_network:
+        ipv4_address: 192.168.1.5
+    ports:
+      - 80:4000
+    volumes:
+      - ./import:/opt/app/import
+    cap_drop:
+      - all
 
 networks:
   docker_network:
