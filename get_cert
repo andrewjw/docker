@@ -1,0 +1,6 @@
+sudo docker run --rm -it \
+    -v `pwd`/certs:/etc/letsencrypt \
+    -v `pwd`/secrets:/secrets \
+    certbot/dns-linode certonly \
+    --dns-linode --dns-linode-credentials /secrets/linode.ini \
+    -d ubnt.home.indiegigs.co.uk
