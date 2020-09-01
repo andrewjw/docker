@@ -66,10 +66,20 @@ services:
       - 9090:9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
       - ./prometheus/data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=900d"
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    container_name: alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - ./secrets/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
   node-exporter:
     privileged: true
     image: prom/node-exporter:v1.0.1
@@ -89,6 +99,13 @@ services:
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
+  zyxel:
+    image: andrewjw/zyxelprometheus:0.4.0
+    container_name: zyxel
+    ports:
+      - 9101:9100
+    env_file:
+      - ./secrets/zyxel
   mythtv:
      image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
      container_name: mythtv

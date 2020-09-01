@@ -1,0 +1,17 @@
+groups:
+  - name: Alerts
+    rules:
+      - alert: TargetDown
+        expr: up{instance!="192.168.1.12:9100"} == 0
+        for: 1m
+        annotations:
+          title: 'Target Is Down'
+        labels:
+          severity: 'critical'
+      - alert: NASDiskSpaceChange
+        expr: delta(node_filesystem_avail_bytes{mountpoint="/"}[7d])/1024/1024/1024 < -20
+        for: 1h
+        annotations:
+          title: 'NAS Disk Space Change Too Negative'
+        labels:
+          severity: 'low'
