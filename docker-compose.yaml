@@ -100,7 +100,7 @@ services:
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
   zyxel:
-    image: andrewjw/zyxelprometheus:0.4.0
+    image: andrewjw/zyxelprometheus:0.5.2
     container_name: zyxel
     ports:
       - 9101:9100
