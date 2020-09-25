@@ -33,5 +33,6 @@ scrape_configs:
 
   - job_name: 'zyxel'
     scrape_interval: 120s
+    scrape_timeout: 60s
     static_configs:
       - targets: ['zyxel:9100']

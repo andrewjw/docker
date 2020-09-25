@@ -5,7 +5,7 @@ version: '2.1'
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:4.3.2
+    image: pihole/pihole:v5.1.2
     hostname: pihole
     domainname: home.indiegigs.com             # <-- Update
     cap_add:
@@ -54,6 +54,9 @@ services:
     volumes:
       - ./grafana:/var/lib/grafana
       - ./grafana.ini:/etc/grafana/grafana.ini
+      - ./teslamate/grafana/dashboards:/teslamate
+    environment:
+      - GF_PATHS_PROVISIONING=/var/lib/grafana/provisioning
     ports:
       - 3000:3000
   prometheus:
@@ -100,7 +103,7 @@ services:
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
   zyxel:
-    image: andrewjw/zyxelprometheus:0.4.0
+    image: andrewjw/zyxelprometheus:0.5.2
     container_name: zyxel
     ports:
       - 9101:9100
@@ -150,6 +153,28 @@ services:
       - ./teslamate-db:/var/lib/postgresql/data
     ports:
       - 5433:5432
+  code:
+    image: codercom/code-server:3.5.0
+    container_name: code
+    restart: always
+    volumes:
+      - /var/services/homes/andrew/programming:/home/coder/project
+      - /var/services/homes/andrew/docker/secrets/code-server.yaml:/home/coder/.config/code-server/config.yaml
+      - /var/services/homes/andrew/.ssh:/home/coder/.ssh
+    ports:
+      - 9000:8080
+    user: "1026:100"
+  jekyll:
+    image: jekyll/jekyll:3.8
+    container_name: jekyll
+    restart: always
+    command: jekyll serve --drafts --future --trace
+    volumes:
+      - /var/services/homes/andrew/programming/site:/srv/jekyll
+    ports:
+      - 9001:4000
+    environment:
+      - MAKEFLAGS=-j4
 
 networks:
   docker_network:
