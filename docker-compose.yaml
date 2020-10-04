@@ -129,7 +129,7 @@ services:
         - 6544/tcp
         - 6760/tcp
   teslamate:
-    image: teslamate/teslamate:1.19.4
+    image: teslamate/teslamate:1.20.0
     container_name: teslamate
     restart: always
     environment:
