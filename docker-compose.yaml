@@ -48,6 +48,8 @@ services:
      ports:
       - 443/tcp
       - 80/tcp
+     volumes:
+      - ./unifi:/unifi
   grafana:
     image: grafana/grafana:7.2.1
     container_name: grafana
