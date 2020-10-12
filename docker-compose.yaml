@@ -109,6 +109,13 @@ services:
       - 9101:9100
     env_file:
       - ./secrets/zyxel
+  glowprom:
+    image: andrewjw/glowprom:0.2.1
+    container_name: glowprom
+    ports:
+      - 9102:9100
+    env_file:
+      - ./secrets/glowprom
   mythtv:
      image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
      container_name: mythtv
