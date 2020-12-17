@@ -112,7 +112,7 @@ services:
     env_file:
       - ./secrets/zyxel
   glowprom:
-    image: andrewjw/glowprom:0.2.1
+    image: andrewjw/glowprom:0.2.5
     container_name: glowprom
     ports:
       - 9102:9100
@@ -120,23 +120,33 @@ services:
       - ./secrets/glowprom
   mythtv:
      image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
+     hostname: mythtv
      container_name: mythtv
      restart: always
-     networks:
-      docker_network:
-        ipv4_address: 192.168.1.2
-     cap_add:
-        - NET_ADMIN
      volumes:
         - /volume1/mythtv:/mnt/nfs/mythtv2
         - ./secrets/mythtv-db-password:/run/secrets/mythtv-db-password:ro
      environment:
         - DBNAME=mythconverg
-        - DBSERVER=192.168.1.5
+        - DBSERVER=mariadb
      ports:
-        - 80/tcp
-        - 6544/tcp
-        - 6760/tcp
+        - 4001:80
+        - 2022:2022
+        - 6543:6543
+        - 6544:6544
+        - 6549:6549
+        - 6554:6554
+        - 6760:6760
+  mariadb:
+    image: mariadb:10.5.6-focal
+    container_name: mariadb
+    restart: always
+    volumes:
+       - ./mariadb:/var/lib/mysql
+    env_file:
+       - ./secrets/mariadb
+    ports:
+       - 3306:3306
   teslamate:
     image: teslamate/teslamate:1.20.0
     container_name: teslamate
@@ -144,6 +154,7 @@ services:
     environment:
       - DATABASE_HOST=database
       - MQTT_HOST=mqtt
+      - DISABLE_MQTT=true
     env_file:
       - ./secrets/teslamate
     volumes:
@@ -163,16 +174,14 @@ services:
     ports:
       - 5433:5432
   code:
-    image: codercom/code-server:3.6.0
+    image: theiaide-custom:latest
     container_name: code
     restart: always
     volumes:
-      - /var/services/homes/andrew/programming:/home/coder/project
-      - /var/services/homes/andrew/docker/secrets/code-server.yaml:/home/coder/.config/code-server/config.yaml
-      - /var/services/homes/andrew/.ssh:/home/coder/.ssh
+      - /var/services/homes/andrew/programming:/home/project
+      - ./secrets/code-ssh:/home/theia/.ssh
     ports:
-      - 9000:8080
-    user: "1026:100"
+      - 9000:3000
   jekyll:
     image: jekyll/jekyll:3.8
     container_name: jekyll
