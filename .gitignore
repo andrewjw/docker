@@ -3,3 +3,4 @@ secrets/
 grafana/grafana.db
 grafana/png
 grafana/plugins
+buildbot-db/
