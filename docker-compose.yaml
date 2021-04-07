@@ -51,7 +51,7 @@ services:
      volumes:
       - ./unifi:/unifi
   grafana:
-    image: grafana/grafana:7.2.1
+    image: grafana/grafana:7.5.3
     container_name: grafana
     volumes:
       - ./grafana:/var/lib/grafana
