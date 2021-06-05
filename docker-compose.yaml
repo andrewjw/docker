@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:5.14.23
+     image: jacobalberty/unifi:6.2.25
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
      cap_add:
