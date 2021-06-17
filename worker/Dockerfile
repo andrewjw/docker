@@ -1,4 +1,4 @@
-FROM buildbot/buildbot-worker:v2.10.0
+FROM buildbot/buildbot-worker:v3.2.0
 
 USER root
 RUN echo "y\ny" | unminimize
