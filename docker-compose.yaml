@@ -168,7 +168,7 @@ services:
     depends_on:
       - database
   teslamateagile:
-    image: mattjeanes/teslamateagile:v1.6.0
+    image: mattjeanes/teslamateagile:v1.7.0
     container_name: teslamateagile
     restart: always
     env_file:
