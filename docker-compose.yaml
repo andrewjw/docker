@@ -167,6 +167,22 @@ services:
       - 4000:4000
     depends_on:
       - database
+  teslamateagile:
+    image: mattjeanes/teslamateagile:v1.6.0
+    container_name: teslamateagile
+    restart: always
+    env_file:
+      - ./secrets/teslamate
+    environment:
+      - DATABASE_HOST=database
+      - TeslaMate__UpdateIntervalSeconds=600
+      - TeslaMate__GeofenceId=68
+      - TeslaMate__EnergyProvider=FixedPrice
+      - FixedPrice__TimeZone=Europe/London # IANA (tz database) time zone code, used for below times
+      - FixedPrice__Prices__0=00:30-04:30=0.05 # You can have as many as these as you need
+      - FixedPrice__Prices__1=04:30-00:30=0.1596
+    depends_on:
+      - database
   database:
     image: postgres:12
     container_name: postgres
