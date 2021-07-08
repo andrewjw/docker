@@ -74,7 +74,7 @@ services:
     ports:
       - 3000:3000
   prometheus:
-    image: prom/prometheus:v2.26.0
+    image: prom/prometheus:v2.28.1
     container_name: prometheus
     restart: always
     links:
