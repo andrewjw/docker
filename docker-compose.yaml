@@ -213,7 +213,7 @@ services:
     ports:
       - 9000:3000
   jekyll:
-    image: jekyll/jekyll:3.8
+    image: jekyll/jekyll:4.0
     container_name: jekyll
     restart: always
     command: jekyll serve --drafts --future --trace
