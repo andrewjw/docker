@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker build -t worker .
+echo $EMAIL
+
+sudo docker build --build-arg EMAIL=$EMAIL -t worker .
