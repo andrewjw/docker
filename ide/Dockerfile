@@ -1,4 +1,4 @@
-FROM theiaide/theia:1.5.0
+FROM theiaide/theia:1.17.0
 
 USER root
 RUN apk add ruby ruby-dev ruby-bundler python3 py3-pip sudo gcc g++ make libc-dev openssl-dev
