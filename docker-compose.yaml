@@ -92,7 +92,7 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=900d"
   alertmanager:
-    image: prom/alertmanager:v0.21.0
+    image: prom/alertmanager:v0.23.0
     container_name: alertmanager
     restart: always    
     ports:
