@@ -90,7 +90,7 @@ services:
       - ./prometheus/data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.retention.time=900d"
+      - "--storage.tsdb.retention.time=3650d"
   alertmanager:
     image: prom/alertmanager:v0.23.0
     container_name: alertmanager
@@ -134,27 +134,27 @@ services:
       - 9102:9100
     env_file:
       - ./secrets/glowprom
-  mythtv:
-     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
-     hostname: mythtv
-     container_name: mythtv
-     restart: always
-     volumes:
-        - /volume1/mythtv:/mnt/nfs/mythtv2
-        - ./secrets/mythtv-db-password:/run/secrets/mythtv-db-password:ro
-     environment:
-        - DBNAME=mythconverg
-        - DBSERVER=mariadb
-     depends_on:
-        - mariadb
-     ports:
-        - 4001:80
-        - 2022:2022
-        - 6543:6543
-        - 6544:6544
-        - 6549:6549
-        - 6554:6554
-        - 6760:6760
+#  mythtv:
+#     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
+#     hostname: mythtv
+#     container_name: mythtv
+#     restart: always
+#     volumes:
+#        - /volume1/mythtv:/mnt/nfs/mythtv2
+#        - ./secrets/mythtv-db-password:/run/secrets/mythtv-db-password:ro
+#     environment:
+#        - DBNAME=mythconverg
+#        - DBSERVER=mariadb
+#     depends_on:
+#        - mariadb
+#     ports:
+#        - 4001:80
+#        - 2022:2022
+#        - 6543:6543
+#        - 6544:6544
+#        - 6549:6549
+#        - 6554:6554
+#        - 6760:6760
   mariadb:
     image: mariadb:10.5.6-focal
     container_name: mariadb
@@ -274,6 +274,13 @@ services:
        - ./secrets/worker
     volumes:
       - ./secrets/worker-ssh:/home/buildbot/.ssh
+      - /var/run/docker.sock:/var/run/docker.sock
+  prom433:
+    image: "andrewjw/prom433:0.2.4"
+    container_name: prom433
+    restart: always
+    ports:
+      - "9103:9100"
 #  rtl_tcp:
 #    image: "rtl_tcp"
 #    container_name: rtl_tcp
