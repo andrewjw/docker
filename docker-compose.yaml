@@ -65,7 +65,7 @@ services:
     volumes:
       - ./unpoller/up.conf:/etc/unifi-poller/up.conf
   grafana:
-    image: grafana/grafana:8.2.2
+    image: grafana/grafana:8.3.4
     container_name: grafana
     restart: always
     volumes:
@@ -74,6 +74,11 @@ services:
       - ./teslamate/grafana/dashboards:/teslamate
     environment:
       - GF_PATHS_PROVISIONING=/var/lib/grafana/provisioning
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      - GF_ANALYTICS_REPORTING_ENABLED=FALSE
+      - DATABASE_PORT=5433
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_SECURITY_DISABLE_GRAVATAR=true
     ports:
       - 3000:3000
   prometheus:
@@ -166,7 +171,7 @@ services:
     ports:
        - 3306:3306
   teslamate:
-    image: teslamate/teslamate:1.24.2
+    image: teslamate/teslamate:1.26.0
     container_name: teslamate
     restart: always
     environment:
@@ -212,13 +217,13 @@ services:
     depends_on:
       - database
   database:
-    image: postgres:12
+    image: postgres:13
     container_name: postgres
     restart: always
     env_file:
       - ./secrets/postgres
     volumes:
-      - ./teslamate-db:/var/lib/postgresql/data
+      - ./teslamate-db13:/var/lib/postgresql/data
     ports:
       - 5433:5432
   code:
@@ -276,18 +281,13 @@ services:
       - ./secrets/worker-ssh:/home/buildbot/.ssh
       - /var/run/docker.sock:/var/run/docker.sock
   prom433:
-    image: "andrewjw/prom433:0.2.4"
+    image: "andrewjw/prom433:0.3.3"
     container_name: prom433
     restart: always
     ports:
       - "9103:9100"
-#  rtl_tcp:
-#    image: "rtl_tcp"
-#    container_name: rtl_tcp
-#    ports:
-#      - 1234:1234
-#    volumes:
-#      - /dev/bus/usb:/dev/bus/usb
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
 networks:
   docker_network:
     enable_ipv6: false
