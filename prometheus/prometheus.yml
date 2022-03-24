@@ -31,12 +31,6 @@ scrape_configs:
     static_configs:
       - targets: ['10.8.0.1:9101']
 
-  - job_name: 'zyxel'
-    scrape_interval: 120s
-    scrape_timeout: 60s
-    static_configs:
-      - targets: ['zyxel:9100']
-
   - job_name: 'glowprom'
     scrape_interval: 30s
     scrape_timeout: 20s

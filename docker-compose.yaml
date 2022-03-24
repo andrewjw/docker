@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:v6.4.54
+     image: jacobalberty/unifi:v7.0.23
      restart: always
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
@@ -48,6 +48,7 @@ services:
 #      - 127.0.0.1
 #      - 8.8.8.8
      ports:
+      - 6789:6789
       - 8080:8080
       - 8880:8880
       - 8443:8443
@@ -123,14 +124,6 @@ services:
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
-  zyxel:
-    image: andrewjw/zyxelprometheus:0.5.2
-    container_name: zyxel
-    restart: always
-    ports:
-      - 9101:9100
-    env_file:
-      - ./secrets/zyxel
   glowprom:
     image: andrewjw/glowprom:0.2.5
     container_name: glowprom
@@ -171,13 +164,13 @@ services:
     ports:
        - 3306:3306
   teslamate:
-    image: teslamate/teslamate:1.26.0
+    image: teslamate/teslamate:1.26.1
     container_name: teslamate
     restart: always
     environment:
       - DATABASE_HOST=database
       - MQTT_HOST=mqtt
-      - DISABLE_MQTT=true
+      #- DISABLE_MQTT=true
     env_file:
       - ./secrets/teslamate
     volumes:
@@ -280,14 +273,28 @@ services:
     volumes:
       - ./secrets/worker-ssh:/home/buildbot/.ssh
       - /var/run/docker.sock:/var/run/docker.sock
+#  rtl_433:
+#    image: "hertzg/rtl_433:alpine-3.12-20.01"
+#    container_name: rtl_433
+#    restart: always
+#    privileged: true
+#    command: "-F mqtt:mqtt:1833"
   prom433:
-    image: "andrewjw/prom433:0.3.3"
+    image: "andrewjw/prom433:0.3.4"
     container_name: prom433
     restart: always
     ports:
-      - "9103:9100"
+      - 9103:9100
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto:2
+    restart: always
+    command: mosquitto -c /mosquitto-no-auth.conf
+    ports:
+      - 1883:1883
     volumes:
-      - /dev/bus/usb:/dev/bus/usb
+      - ./mosquitto/conf:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
 networks:
   docker_network:
     enable_ipv6: false
