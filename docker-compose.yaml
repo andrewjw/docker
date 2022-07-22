@@ -3,6 +3,14 @@
 version: '2.1'
 
 services:
+  rtl_433:
+    image: "hertzg/rtl_433:21.12-alpine3.15.0"
+    container_name: rtl_433
+    restart: always
+    privileged: true
+#    command: "-F mqtt://mqtt:1883"
+    command: "-F mqtt://mqtt:1883 -f 433920000 -s 1500k -Y classic"
+#    command: "-F mqtt://mqtt:1883 -f 433.97M -s 300000 -p 66" # -Y level=-25.2"
   pihole:
     container_name: pihole
     image: pihole/pihole:2021.10.1
@@ -14,7 +22,7 @@ services:
     networks:
       docker_network:
         ipv4_address: 192.168.1.3   # <-- Update
-#        ipv6_address: 2a02:8010:6253:0:0:0:1:2
+        ipv6_address: 2a02:8010:653a:0:0:0:1:3
     dns:
       - 127.0.0.1
       - 8.8.8.8
@@ -26,7 +34,7 @@ services:
       - 80/tcp
     environment:
       ServerIP: 192.168.1.3         # <-- Update (match ipv4_address)
- #     ServerIPv6: 2a02:8010:6253:0:0:0:1:2
+      ServerIPv6: 2a02:8010:653a:0:0:0:1:3
       VIRTUAL_HOST: pihole.home.indiegigs.com  # <-- Update (match hostname + domainname)
       WEBPASSWORD: ""                   # <-- Add password (if required)
     volumes:
@@ -164,7 +172,7 @@ services:
     ports:
        - 3306:3306
   teslamate:
-    image: teslamate/teslamate:1.26.1
+    image: teslamate/teslamate:1.27.1
     container_name: teslamate
     restart: always
     environment:
@@ -205,8 +213,8 @@ services:
       - TeslaMate__GeofenceId=68
       - TeslaMate__EnergyProvider=FixedPrice
       - FixedPrice__TimeZone=Europe/London # IANA (tz database) time zone code, used for below times
-      - FixedPrice__Prices__0=00:30-04:30=0.05 # You can have as many as these as you need
-      - FixedPrice__Prices__1=04:30-00:30=0.1596
+      - FixedPrice__Prices__0=00:30-04:30=0.075 # You can have as many as these as you need
+      - FixedPrice__Prices__1=04:30-00:30=0.3511
     depends_on:
       - database
   database:
@@ -273,14 +281,8 @@ services:
     volumes:
       - ./secrets/worker-ssh:/home/buildbot/.ssh
       - /var/run/docker.sock:/var/run/docker.sock
-#  rtl_433:
-#    image: "hertzg/rtl_433:alpine-3.12-20.01"
-#    container_name: rtl_433
-#    restart: always
-#    privileged: true
-#    command: "-F mqtt:mqtt:1833"
   prom433:
-    image: "andrewjw/prom433:0.3.4"
+    image: "andrewjw/prom433:0.4.2"
     container_name: prom433
     restart: always
     ports:
@@ -295,9 +297,24 @@ services:
     volumes:
       - ./mosquitto/conf:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
+  mktxp:
+    container_name: mktxp
+    image: guenterbailey/mktxp:latest
+    restart: always
+    ports:
+      - 49090:49090
+    volumes:
+      - ./mktxp:/root/mktxp
+  iperf3:
+    container_name: iperf3
+    image: networkstatic/iperf3
+    restart: always
+    ports:
+      - 5201:5201
+    command: -s
 networks:
   docker_network:
-    enable_ipv6: false
+    enable_ipv6: true
     driver: macvlan
     driver_opts:
       parent: eth1
@@ -306,4 +323,4 @@ networks:
         - subnet: 192.168.1.0/24            # <-- Update
           gateway: 192.168.1.1              # <-- Update
           ip_range: 192.168.1.3/28        # <-- Update
-       # - subnet: 2a02:8010:6253:0:0:0:1:1/48
+        - subnet: 2a02:8010:653a:0:0:0:1:1/48

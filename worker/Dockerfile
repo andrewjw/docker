@@ -9,7 +9,7 @@ RUN echo "tzdata tzdata/Areas select Europe" > /tmp/tzdata.txt && \
     debconf-set-selections /tmp/tzdata.txt && \
     rm -f /etc/timezone /etc/localtime && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ruby2.7 ruby2.7-dev rsync python3-pip docker.io nodejs npm sudo && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ruby2.7 ruby2.7-dev rsync python3-pip docker.io nodejs npm sudo nano && \
     echo "buildbot ALL= NOPASSWD: /usr/bin/docker" >> /etc/sudoers
 RUN cat /etc/sudoers
 RUN gem install bundler

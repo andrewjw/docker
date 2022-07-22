@@ -42,3 +42,33 @@ scrape_configs:
     scrape_timeout: 20s
     static_configs:
       - targets: ['unpoller:9130']
+
+  - job_name: 'mktxp'
+    scrape_interval: 30s
+    scrape_timeout: 20s
+    static_configs:
+      - targets: ['mktxp:49090']
+
+  - job_name: 'prom433'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['prom433:9100']
+    metric_relabel_configs:
+      - source_labels: [__name__,id,channel]
+        separator: ":"
+        regex: "nexus_temperature:109:1"
+        action: replace
+        replacement: mainbedroom
+        target_label: room
+      - source_labels: [__name__,id]
+        separator: ":"
+        regex: "nexus_temperature:158"
+        action: drop
+      - source_labels: [__name__,id,channel]
+        separator: ":"
+        regex: "nexus_temperature:180:3"
+        action: replace
+        replacement: harrietbedroom
+        target_label: room
+
+        
