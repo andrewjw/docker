@@ -4,12 +4,18 @@ version: '2.1'
 
 services:
   rtl_433:
-    image: "hertzg/rtl_433:21.12-alpine3.15.0"
+#    image: "hertzg/rtl_433:22.11-alpine3.15.0"
+    image: "rtl_433_aw"
     container_name: rtl_433
     restart: always
     privileged: true
-#    command: "-F mqtt://mqtt:1883"
-    command: "-F mqtt://mqtt:1883 -f 433920000 -s 1500k -Y classic"
+    command: "-F mqtt://mqtt:1883 -f 434000000 -M level"
+    volumes:
+      - ./analysis:/root/analysis
+#    command: "-F mqtt://mqtt:1883 -f 434100000 -s 300k -M level -M stats:3:600"
+#    command: "-F mqtt://mqtt:1883 -f 434010000 -s 300k -Y minmax -M level -Y autolevel -R 19 -R 32 -R 152"
+#    command: "-F mqtt://mqtt:1883 -f 433970000 -s 1024k -Y classic -v -M level"
+#    command: "-F mqtt://mqtt:1883 -f 433920000 -s 300k -Y classic -v -M level"
 #    command: "-F mqtt://mqtt:1883 -f 433.97M -s 300000 -p 66" # -Y level=-25.2"
   pihole:
     container_name: pihole
@@ -43,7 +49,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:v7.1.65
+     image: jacobalberty/unifi:v7.1.68
      restart: always
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
@@ -133,7 +139,7 @@ services:
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
   glowprom:
-    image: andrewjw/glowprom:0.2.5
+    image: andrewjw/glowprom:0.3.4
     container_name: glowprom
     restart: always
     ports:
@@ -248,7 +254,7 @@ services:
     environment:
       - MAKEFLAGS=-j4
   buildbot:
-    image: buildbot/buildbot-master:master
+    image: buildbot/buildbot-master:v3.6.1
     container_name: buildbot
     restart: always
     env_file:
@@ -260,8 +266,8 @@ services:
     ports:
       - "8010:8010"
     volumes:
-      - ./buildbot.cfg:/var/lib/buildbot/master.cfg
-      - ./buildbot-db:/var/lib/buildbot/db
+      - ./buildbot.cfg:/buildbot/master.cfg
+      - ./buildbot-db:/buildbot/db
       - ./secrets/buildbot:/secrets
     logging:
       options:
@@ -282,7 +288,7 @@ services:
       - ./secrets/worker-ssh:/home/buildbot/.ssh
       - /var/run/docker.sock:/var/run/docker.sock
   prom433:
-    image: "andrewjw/prom433:0.4.2"
+    image: "andrewjw/prom433:2.1.0"
     container_name: prom433
     restart: always
     ports:
@@ -312,6 +318,19 @@ services:
     ports:
       - 5201:5201
     command: -s
+  blackbox:
+    container_name: blackbox
+    image: prom/blackbox-exporter:v0.23.0
+    restart: always
+    ports:
+      - 9115:9115
+    volumes:
+      - ./blackbox:/config
+    command: --config.file /config/blackbox.yml
+#    networks:
+#      docker_network:
+#        ipv4_address: 192.168.1.4
+#        ipv6_address: 2a02:8010:653a:0:0:0:1:4
 networks:
   docker_network:
     enable_ipv6: true
@@ -324,3 +343,4 @@ networks:
           gateway: 192.168.1.1              # <-- Update
           ip_range: 192.168.1.3/28        # <-- Update
         - subnet: 2a02:8010:653a:0:0:0:1:1/48
+

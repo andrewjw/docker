@@ -8,10 +8,38 @@ groups:
           title: 'Target Is Down'
         labels:
           severity: 'critical'
+      - alert: WebsiteDown
+        expr: probe_success == 0
+        for: 5m
+        annotations:
+          title: 'Website Down'
+        labels:
+          severity: 'critical'
       - alert: NASDiskSpaceChange
-        expr: delta(node_filesystem_avail_bytes{mountpoint="/"}[7d])/1024/1024/1024 < -20
+        expr: delta(node_filesystem_avail_bytes{mountpoint="/",job="bigdata"}[7d])/1024/1024/1024 < -20
         for: 1h
         annotations:
           title: 'NAS Disk Space Change Too Negative'
         labels:
           severity: 'low'
+      - alert: BatteryLow
+        expr: prom433_battery_ok{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WHx080", room!~"mainbedroom|harrietbedroom"} == 0
+        for: 1m
+        annotations:
+           title: 'Battery Low'
+        labels:
+           severity: 'low'
+      - alert: LostConnection
+        expr: (time() - prom433_last_message{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WHx080"}) >= 15*60
+        for: 1m
+        annotations:
+           title: 'Lost Connection'
+        labels:
+           severity: 'critical'
+      - alert: NoGlowData
+        expr: time() - glowprom_timestamp >= 15 * 60
+        for: 1m
+        annotations:
+           title: 'No Meter Data'
+        labels:
+           severity: 'critical'

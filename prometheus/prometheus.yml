@@ -49,26 +49,66 @@ scrape_configs:
     static_configs:
       - targets: ['mktxp:49090']
 
+  - job_name: 'satip'
+    scrape_interval: 30s
+    scrape_timeout: 20s
+    static_configs:
+      - targets: ['192.168.1.19:9100']
+
   - job_name: 'prom433'
     scrape_interval: 30s
     static_configs:
       - targets: ['prom433:9100']
     metric_relabel_configs:
-      - source_labels: [__name__,id,channel]
+      - source_labels: [model,channel]
         separator: ":"
-        regex: "nexus_temperature:109:1"
+        regex: "Nexus-TH:1"
         action: replace
         replacement: mainbedroom
         target_label: room
-      - source_labels: [__name__,id]
+      - source_labels: [model,channel]
         separator: ":"
-        regex: "nexus_temperature:158"
-        action: drop
-      - source_labels: [__name__,id,channel]
+        regex: "Eurochron-EFTH800:2"
+        action: replace
+        replacement: alexbedroom
+        target_label: room
+      - source_labels: [model,channel]
         separator: ":"
-        regex: "nexus_temperature:180:3"
+        regex: "Nexus-TH:3"
         action: replace
         replacement: harrietbedroom
         target_label: room
+      - source_labels: [model,channel]
+        separator: ":"
+        regex: "Eurochron-EFTH800:4"
+        action: replace
+        replacement: lounge
+        target_label: room
+      - source_labels: [model,channel]
+        separator: ":"
+        regex: "Eurochron-EFTH800:5"
+        action: replace
+        replacement: kitchen
+        target_label: room
+      - source_labels: [model,channel]
+        separator: ":"
+        regex: "Eurochron-EFTH800:6"
+        action: replace
+        replacement: office
+        target_label: room
 
-        
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://theandrewwilkinson.com
+        - http://welwynweather.co.uk
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
