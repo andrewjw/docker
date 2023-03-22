@@ -1,4 +1,4 @@
-FROM buildbot/buildbot-worker:v2.10.0
+FROM buildbot/buildbot-worker:v2.10.5
 
 ARG EMAIL
 
