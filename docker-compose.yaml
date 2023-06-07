@@ -49,7 +49,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:v7.1.68
+     image: jacobalberty/unifi:v7.3.83
      restart: always
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
@@ -178,7 +178,7 @@ services:
     ports:
        - 3306:3306
   teslamate:
-    image: teslamate/teslamate:1.27.1
+    image: teslamate/teslamate:1.27.2
     container_name: teslamate
     restart: always
     environment:
@@ -197,12 +197,14 @@ services:
       - database
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_LISTEN_PORT: 80
       PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+      MAX_LOGIN_ATTEMPTS: 0
     env_file:
-      - ./secrets/teslamate
+      - ./secrets/pgadmin
     ports:
       - 4002:80
     volumes:
@@ -293,6 +295,16 @@ services:
     restart: always
     ports:
       - 9103:9100
+  folder_size:
+    image: "prometheus_folder_size_exporter:latest"
+    container_name: folder_size
+    restart: always
+    command: prometheus_folder_size_exporter -p 9974 -i /config.json -b 300
+    volumes:
+      - ./prometheus_folder_size_exporter/config.json:/config.json
+      - /volume1:/volume1:ro
+    ports:
+      - 9974:9974
   mqtt:
     container_name: mqtt
     image: eclipse-mosquitto:2
