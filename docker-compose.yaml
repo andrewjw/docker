@@ -235,15 +235,6 @@ services:
       - ./teslamate-db13:/var/lib/postgresql/data
     ports:
       - 5433:5432
-  code:
-    image: theiaide-custom:latest
-    container_name: code
-    restart: always
-    volumes:
-      - /var/services/homes/andrew/programming:/home/project
-      - ./secrets/code-ssh:/home/theia/.ssh
-    ports:
-      - 9000:3000
   jekyll:
     image: jekyll/jekyll:3.8
     container_name: jekyll
