@@ -67,7 +67,7 @@ scrape_configs:
     metric_relabel_configs:
       - source_labels: [model,channel]
         separator: ":"
-        regex: "Nexus-TH:1"
+        regex: "Eurochron-EFTH800:1"
         action: replace
         replacement: mainbedroom
         target_label: room
@@ -79,7 +79,7 @@ scrape_configs:
         target_label: room
       - source_labels: [model,channel]
         separator: ":"
-        regex: "Nexus-TH:3"
+        regex: "Eurochron-EFTH800:3"
         action: replace
         replacement: harrietbedroom
         target_label: room
