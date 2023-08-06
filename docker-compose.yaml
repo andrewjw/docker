@@ -139,7 +139,7 @@ services:
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
   glowprom:
-    image: andrewjw/glowprom:0.3.4
+    image: andrewjw/glowprom:0.4.5
     container_name: glowprom
     restart: always
     ports:
