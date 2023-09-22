@@ -123,7 +123,7 @@ services:
       - "--config.file=/etc/alertmanager/alertmanager.yml"
   node-exporter:
     privileged: true
-    image: prom/node-exporter:v1.2.2
+    image: prom/node-exporter:v1.6.1
     container_name: node-exporter
     restart: always
     network_mode: host
