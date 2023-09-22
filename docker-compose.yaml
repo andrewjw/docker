@@ -49,7 +49,7 @@ services:
     restart: unless-stopped
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:v7.3.83
+     image: jacobalberty/unifi:v7.5.174
      restart: always
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
