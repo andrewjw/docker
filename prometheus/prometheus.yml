@@ -54,6 +54,7 @@ scrape_configs:
     scrape_timeout: 20s
     static_configs:
       - targets: ['192.168.1.19:9100']
+      - targets: ['192.168.1.19:9101']
 
   - job_name: 'folder_size'
     scrape_interval: 60s
