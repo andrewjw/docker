@@ -221,8 +221,8 @@ services:
       - TeslaMate__GeofenceId=68
       - TeslaMate__EnergyProvider=FixedPrice
       - FixedPrice__TimeZone=Europe/London # IANA (tz database) time zone code, used for below times
-      - FixedPrice__Prices__0=00:30-04:30=0.075 # You can have as many as these as you need
-      - FixedPrice__Prices__1=04:30-00:30=0.3511
+      - FixedPrice__Prices__0=00:30-04:30=0.09 # You can have as many as these as you need
+      - FixedPrice__Prices__1=04:30-00:30=0.31028
     depends_on:
       - database
   database:
