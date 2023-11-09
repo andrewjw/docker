@@ -19,7 +19,7 @@ services:
 #    command: "-F mqtt://mqtt:1883 -f 433.97M -s 300000 -p 66" # -Y level=-25.2"
   pihole:
     container_name: pihole
-    image: pihole/pihole:2023.05.2
+    image: pihole/pihole:2023.10.0
     restart: always
     hostname: pihole
     domainname: home.indiegigs.com             # <-- Update
