@@ -323,7 +323,7 @@ services:
     command: -s
   blackbox:
     container_name: blackbox
-    image: prom/blackbox-exporter:v0.23.0
+    image: prom/blackbox-exporter:v0.24.0
     restart: always
     ports:
       - 9115:9115
