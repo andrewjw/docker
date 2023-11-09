@@ -78,7 +78,7 @@ services:
     ports:
       - 9130/tcp
     volumes:
-      - ./unpoller/up.conf:/etc/unifi-poller/up.conf
+      - ./unpoller/up.conf:/etc/unpoller/up.conf
   grafana:
     image: grafana/grafana:8.5.27
     container_name: grafana
