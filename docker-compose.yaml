@@ -247,7 +247,7 @@ services:
     environment:
       - MAKEFLAGS=-j4
   buildbot:
-    image: buildbot/buildbot-master:v3.6.1
+    image: buildbot/buildbot-master:v3.9.2
     container_name: buildbot
     restart: always
     env_file:
