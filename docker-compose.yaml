@@ -235,51 +235,6 @@ services:
       - ./teslamate-db13:/var/lib/postgresql/data
     ports:
       - 5433:5432
-  jekyll:
-    image: jekyll/jekyll:3.8
-    container_name: jekyll
-    restart: always
-    command: jekyll serve --drafts --future --trace
-    volumes:
-      - /var/services/homes/andrew/programming/site:/srv/jekyll
-    ports:
-      - 9001:4000
-    environment:
-      - MAKEFLAGS=-j4
-  buildbot:
-    image: buildbot/buildbot-master:v3.6.1
-    container_name: buildbot
-    restart: always
-    env_file:
-      - ./secrets/buildbot
-    environment:
-      - BUILDBOT_WORKER_PORT=9989
-      - BUILDBOT_WEB_URL=http://192.168.1.207:8010/
-      - BUILDBOT_WEB_PORT=tcp:port=8010
-    ports:
-      - "8010:8010"
-    volumes:
-      - ./buildbot.cfg:/buildbot/master.cfg
-      - ./buildbot-db:/buildbot/db
-      - ./secrets/buildbot:/secrets
-    logging:
-      options:
-        max-size: "10m"
-        max-files: "3"
-  worker:
-    image: "worker"
-    container_name: worker
-    restart: always
-    environment:
-      BUILDMASTER: buildbot
-      BUILDMASTER_PORT: 9989
-      WORKERNAME: buildbot-docker
-      WORKER_ENVIRONMENT_BLACKLIST: DOCKER_BUILDBOT* BUILDBOT_ENV_* BUILDBOT_1* WORKER_ENVIRONMENT_BLACKLIST
-    env_file:
-       - ./secrets/worker
-    volumes:
-      - ./secrets/worker-ssh:/home/buildbot/.ssh
-      - /var/run/docker.sock:/var/run/docker.sock
   prom433:
     image: "andrewjw/prom433:2.3.9"
     container_name: prom433
@@ -314,13 +269,6 @@ services:
       - 49090:49090
     volumes:
       - ./mktxp:/root/mktxp
-  iperf3:
-    container_name: iperf3
-    image: networkstatic/iperf3
-    restart: always
-    ports:
-      - 5201:5201
-    command: -s
   blackbox:
     container_name: blackbox
     image: prom/blackbox-exporter:v0.24.0
