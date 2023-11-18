@@ -236,7 +236,7 @@ services:
     ports:
       - 5433:5432
   prom433:
-    image: "andrewjw/prom433:2.3.9"
+    image: "andrewjw/prom433:2.4.0"
     container_name: prom433
     restart: always
     ports:
