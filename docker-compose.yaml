@@ -282,6 +282,14 @@ services:
 #      docker_network:
 #        ipv4_address: 192.168.1.4
 #        ipv6_address: 2a02:8010:653a:0:0:0:1:4
+  smartdisplay:
+    container_name: smartdisplay
+    image: smartdisplay_backend
+    restart: always
+    expose:
+      - 6001
+    command: "6001"
+    network_mode: host
 networks:
   docker_network:
     enable_ipv6: true
