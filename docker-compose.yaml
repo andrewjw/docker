@@ -80,7 +80,7 @@ services:
     volumes:
       - ./unpoller/up.conf:/etc/unpoller/up.conf
   grafana:
-    image: grafana/grafana:8.5.27
+    image: grafana/grafana:10.2.3
     container_name: grafana
     restart: always
     volumes:
