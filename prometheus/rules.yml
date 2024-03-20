@@ -23,14 +23,14 @@ groups:
         labels:
           severity: 'low'
       - alert: BatteryLow
-        expr: prom433_battery_ok{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WHx080", room!~"mainbedroom|harrietbedroom"} == 0
+        expr: prom433_battery_ok{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WS90", room!~"mainbedroom|harrietbedroom"} < 0.5
         for: 1m
         annotations:
            title: 'Battery Low'
         labels:
            severity: 'low'
       - alert: LostConnection
-        expr: (time() - prom433_last_message{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WHx080"}) >= 15*60
+        expr: (time() - prom433_last_message{model=~"Eurochron-EFTH800|Nexus-TH|Fineoffset-WS90"}) >= 15*60
         for: 1m
         annotations:
            title: 'Lost Connection'
@@ -43,67 +43,3 @@ groups:
            title: 'No Meter Data'
         labels:
            severity: 'critical'
-  - name: Costs
-    interval: 1m
-    rules:
-    - record: glowprom_cost
-      labels:
-        type: 'electric'
-      expr: >
-            (glowprom_cost{type="electric"} offset 1m or on() vector(0))
-            + on() (((increase(glowprom_import_cumulative_Wh{type="electric"}[1m])/1000 * on () octopus_rate{type='electric',rate='offpeak'})
-                    and on () ((hour()==0 and minute()>30) or (hour()==4 and minute()<=30) or hour()>0<4))
-                  or (increase(glowprom_import_cumulative_Wh{type="electric"}[1m])/1000 * on () octopus_rate{type='electric',rate='peak'}))
-            + on () ((octopus_standing{type='electric'} and on () (hour()==0 and minute()==0)) or vector(0))
-    - record: glowprom_cost
-      labels:
-        type: 'gas'
-      expr: >
-            (glowprom_cost{type="gas"} offset 1m or on() vector(0))
-            + on () (increase(glowprom_import_cumulative_Wh{type="gas"}[1m])/1000 * on () octopus_rate{type='gas'})
-            + on () ((octopus_standing{type='gas'} and on () (hour()==0 and minute()==0)) or vector(0))
-    - record: octopus_rate
-      labels:
-        type: 'electric'
-        rate: 'peak'
-      expr: >
-            (vector(31.028) and (year() > 2023 or month() >= 7))
-            or (vector(41.65) and year() == 2023 and month() == 6 and day_of_month() >= 29)
-            or vector(35.11)
-    - record: octopus_rate
-      labels:
-        type: 'electric'
-        rate: 'offpeak'
-      expr: >
-            (vector(9) and (year() > 2023 or month() > 9 or day_of_month() >= 16))
-            or (vector(9.5) and (year() > 2023 or month() > 6 or day_of_month() >= 29))
-            or vector(7.5)
-    - record: octopus_rate
-      labels:
-        type: 'gas'
-      expr: >
-            (vector(6.785) and (year() > 2023 or month() >= 10))
-            or (vector(7.399) and (year() > 2023 or month() >= 7))
-            or vector(10.204)
-    - record: octopus_standing
-      labels:
-        type: 'electric'
-      expr: >
-            (vector(42.013) and (year() > 2023 or month() > 6 or day_of_month() >= 29))
-            or vector(37.65)
-    - record: octopus_standing
-      labels:
-        type: 'gas'
-      expr: vector(27.468)
-    - record: test_gas
-      labels:
-        timing: '1m'
-      expr: increase(glowprom_import_cumulative_Wh{type="gas"}[1m])/1000
-    - record: test_gas
-      labels:
-        timing: '2m'
-      expr: increase(glowprom_import_cumulative_Wh{type="gas"}[2m])/1000
-    - record: test_gas
-      labels:
-        timing: '5m'
-      expr: increase(glowprom_import_cumulative_Wh{type="gas"}[5m])/1000
