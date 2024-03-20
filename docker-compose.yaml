@@ -4,11 +4,12 @@ version: '2.1'
 
 services:
   rtl_433:
-    image: "hertzg/rtl_433:23.11"
+#    image: "hertzg/rtl_433:23.11"
+    image: rtl_433_aw:latest
     container_name: rtl_433
     restart: always
     privileged: true
-    command: "-F mqtt://mqtt:1883 -f 434.0M -f 868.1M -H 90 -M level -Y classic -s 1000k"
+    command: "-F mqtt://mqtt:1883 -f 434.0M -f 868.5M -H 90 -M level"#-Y classic" # -s 1000k"
     volumes:
       - ./analysis:/root/analysis
   pihole:
@@ -104,6 +105,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=3650d"
+      - "--web.enable-admin-api"
   alertmanager:
     image: prom/alertmanager:v0.26.0
     container_name: alertmanager
@@ -228,8 +230,20 @@ services:
       - ./teslamate-db13:/var/lib/postgresql/data
     ports:
       - 5433:5432
+  query_exporter:
+    image: adonato/query-exporter:2.9.2
+    container_name: query_exporter
+    restart: no
+    ports:
+      - 9560:9560
+    volumes:
+      - ./query_exporter/config.yml:/config.yaml
+    environment:
+      - PROMETHEUS_DISABLE_CREATED_SERIES=True
+    env_file:
+      - ./secrets/teslamate
   prom433:
-    image: "andrewjw/prom433:2.4.0"
+    image: "andrewjw/prom433:2.6.0"
     container_name: prom433
     restart: always
     ports:
@@ -283,6 +297,17 @@ services:
       - 6001
     command: "6001"
     network_mode: host
+    env_file:
+      - ./secrets/smartdisplay
+  house_manager:
+    container_name: house_manager
+    image: house_manager:latest
+    restart: always
+    command: "--mqtt mqtt"
+    ports:
+      - 6060:6060
+    env_file:
+      - ./secrets/house_manager
 networks:
   docker_network:
     enable_ipv6: true
