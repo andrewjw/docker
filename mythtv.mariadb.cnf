@@ -1,0 +1,8 @@
+[mariadb]
+key_buffer = 48M
+max_allowed_packet = 8M
+sort_buffer_size = 48M
+net_buffer_length = 1M
+thread_cache_size = 4
+query_cache_type = 1
+query_cache_size = 16M
