@@ -141,6 +141,14 @@ services:
       - 9102:9100
     env_file:
       - ./secrets/glowprom
+  foxessprom:
+    image: andrewjw/foxessprom:0.2.0
+    container_name: foxessprom
+    restart: always
+    ports:
+      - 9104:9100
+    env_file:
+      - ./secrets/foxessprom
 #  mythtv:
 #     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
 #     hostname: mythtv
@@ -167,13 +175,14 @@ services:
     container_name: mariadb
     restart: always
     volumes:
+       - ./mythtv.mariadb.cnf:/etc/mysql/conf.d/mythtv.mariadb.cnf
        - ./mariadb:/var/lib/mysql
     env_file:
        - ./secrets/mariadb
     ports:
        - 3306:3306
   teslamate:
-    image: teslamate/teslamate:1.28.4
+    image: teslamate/teslamate:1.29.1
     container_name: teslamate
     restart: always
     environment:
@@ -237,7 +246,7 @@ services:
     ports:
       - 9560:9560
     volumes:
-      - ./query_exporter/config.yml:/config.yaml
+      - ./query_exporter/config.yml:/config/config.yaml
     environment:
       - PROMETHEUS_DISABLE_CREATED_SERIES=True
     env_file:
@@ -248,16 +257,16 @@ services:
     restart: always
     ports:
       - 9103:9100
-  folder_size:
-    image: "prometheus_folder_size_exporter:latest"
-    container_name: folder_size
-    restart: always
-    command: prometheus_folder_size_exporter -p 9974 -i /config.json -b 300
-    volumes:
-      - ./prometheus_folder_size_exporter/config.json:/config.json
-      - /volume1:/volume1:ro
-    ports:
-      - 9974:9974
+#  folder_size:
+#    image: "prometheus_folder_size_exporter:latest"
+#    container_name: folder_size
+#    restart: always
+#    command: prometheus_folder_size_exporter -p 9974 -i /config.json -b 300
+#    volumes:
+#      - ./prometheus_folder_size_exporter/config.json:/config.json
+#      - /volume1:/volume1:ro
+#    ports:
+#      - 9974:9974
   mqtt:
     container_name: mqtt
     image: eclipse-mosquitto:2
