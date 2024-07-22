@@ -107,7 +107,7 @@ services:
       - "--storage.tsdb.retention.time=3650d"
       - "--web.enable-admin-api"
   alertmanager:
-    image: prom/alertmanager:v0.26.0
+    image: prom/alertmanager:v0.27.0
     container_name: alertmanager
     restart: always    
     ports:
