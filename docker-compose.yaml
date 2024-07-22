@@ -230,7 +230,7 @@ services:
     depends_on:
       - database
   database:
-    image: postgres:13
+    image: postgres:16
     container_name: postgres
     restart: always
     env_file:
