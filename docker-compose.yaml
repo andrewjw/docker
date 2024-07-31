@@ -252,7 +252,7 @@ services:
     env_file:
       - ./secrets/teslamate
   prom433:
-    image: "andrewjw/prom433:2.6.0"
+    image: "andrewjw/prom433:2.6.3"
     container_name: prom433
     restart: always
     ports:
