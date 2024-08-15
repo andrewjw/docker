@@ -226,7 +226,7 @@ services:
       - TeslaMate__EnergyProvider=FixedPrice
       - FixedPrice__TimeZone=Europe/London # IANA (tz database) time zone code, used for below times
       - FixedPrice__Prices__0=00:30-05:30=0.085 # You can have as many as these as you need
-      - FixedPrice__Prices__1=04:30-00:30=0.24393
+      - FixedPrice__Prices__1=05:30-00:30=0.24393
     depends_on:
       - database
   database:
@@ -242,7 +242,7 @@ services:
   query_exporter:
     image: adonato/query-exporter:2.10.0
     container_name: query_exporter
-    restart: no
+#    restart: never
     ports:
       - 9560:9560
     volumes:
