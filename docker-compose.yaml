@@ -142,13 +142,15 @@ services:
     env_file:
       - ./secrets/glowprom
   foxessprom:
-    image: andrewjw/foxessprom:0.3.0
+    image: andrewjw/foxessprom:0.4.0
     container_name: foxessprom
     restart: always
     ports:
       - 9104:9100
     env_file:
       - ./secrets/foxessprom
+    command:
+      - "--mqtt=mqtt"
 #  mythtv:
 #     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
 #     hostname: mythtv
