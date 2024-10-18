@@ -138,3 +138,9 @@ scrape_configs:
     scrape_timeout: 20s
     static_configs:
       - targets: ['query_exporter:9560']
+
+  - job_name: 'watermeter'
+    scrape_interval: 30s
+    scrape_timeout: 20s
+    static_configs:
+      - targets: ['192.168.1.59:80']
