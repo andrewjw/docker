@@ -43,7 +43,7 @@ services:
       - ../pihole/data:/etc/pihole
   unifi:
      container_name: unifi-controller
-     image: jacobalberty/unifi:v8.3.32
+     image: jacobalberty/unifi:v8.5.6
      restart: always
      hostname: unifi
      domainname: home.indiegigs.com             # <-- Update
