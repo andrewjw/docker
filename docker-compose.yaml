@@ -325,14 +325,12 @@ services:
     container_name: shelly
     image: webdevops/shelly-plug-exporter:24.9.0
     restart: always
-    networks:
-      docker_network:
-        ipv4_address: 192.168.1.4   # <-- Update
-        ipv6_address: 2a02:8010:653a:0:0:0:1:4
+    ports:
+      - 8089:8089
     environment:
       - VERBOSE=1
       - SERVER_BIND=:8089
-      - SHELLY_SERVICEDISCOVERY_TIMEOUT=10s
+      - SHELLY_HOST_SHELLYPLUGS=192.168.1.61,192.168.1.62,192.168.1.64,192.168.1.65,192.168.1.66
 networks:
   docker_network:
     enable_ipv6: true
