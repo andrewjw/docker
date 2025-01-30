@@ -1,0 +1,26 @@
+databases:
+  teslamate:
+    dsn: env:CONNECTION_STRING
+
+metrics:
+  teslamate_home_kwh:
+    type: counter
+    description: Amount of electricity used at home by Telsa
+    labels: [car_id]
+    increment: false
+  teslamate_home_cost:
+    type: counter
+    description: Cost of electricity used at home by Telsa
+    labels: [car_id]
+    increment: false
+
+queries:
+  teslamate_charges:
+    interval: 60
+    databases:
+      - teslamate
+    metrics: [teslamate_home_kwh, teslamate_home_cost]
+    sql: select sum(charge_energy_used) as teslamate_home_kwh, sum(cost) as teslamate_home_cost, min(car_id) as car_id from charging_processes where geofence_id=68 and car_id=:car__id
+    parameters:
+      car:
+        - id: 1
