@@ -2,7 +2,7 @@ groups:
   - name: Alerts
     rules:
       - alert: TargetDown
-        expr: up{instance!="192.168.1.12:9100"} == 0
+        expr: up{instance!="192.168.1.12:9100",instance!="192.168.1.20:9100"} == 0
         for: 1m
         annotations:
           title: 'Target Is Down'
