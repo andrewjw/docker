@@ -331,6 +331,27 @@ services:
       - VERBOSE=1
       - SERVER_BIND=:8089
       - SHELLY_HOST_SHELLYPLUGS=192.168.1.61,192.168.1.62,192.168.1.64,192.168.1.65,192.168.1.66
+  actual_server:
+    image: docker.io/actualbudget/actual-server:25.3.1-alpine
+    ports:
+      - '5006:5006'
+    environment:
+      # - ACTUAL_HTTPS_KEY=/data/selfhost.key
+      # - ACTUAL_HTTPS_CERT=/data/selfhost.crt
+      # - ACTUAL_PORT=5006
+      - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=200
+      # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
+      - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=200
+    volumes:
+      - ./actual-data:/data
+    healthcheck:
+      # Enable health check for the instance
+      test: ['CMD-SHELL', 'node src/scripts/health-check.js']
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
 networks:
   docker_network:
     enable_ipv6: true
