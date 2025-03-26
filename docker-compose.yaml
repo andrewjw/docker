@@ -142,7 +142,7 @@ services:
     env_file:
       - ./secrets/glowprom
   foxessprom:
-    image: andrewjw/foxessprom:0.4.3
+    image: andrewjw/foxessprom:1.1.0
     container_name: foxessprom
     restart: always
     ports:
