@@ -172,17 +172,17 @@ services:
 #        - 6549:6549
 #        - 6554:6554
 #        - 6760:6760
-  mariadb:
-    image: mariadb:10.8.2-focal
-    container_name: mariadb
-    restart: always
-    volumes:
-       - ./mythtv.mariadb.cnf:/etc/mysql/conf.d/mythtv.mariadb.cnf
-       - ./mariadb:/var/lib/mysql
-    env_file:
-       - ./secrets/mariadb
-    ports:
-       - 3306:3306
+#  mariadb:
+#    image: mariadb:10.8.2-focal
+#    container_name: mariadb
+#    restart: always
+#    volumes:
+#       - ./mythtv.mariadb.cnf:/etc/mysql/conf.d/mythtv.mariadb.cnf
+#       - ./mariadb:/var/lib/mysql
+#    env_file:
+#       - ./secrets/mariadb
+#    ports:
+#       - 3306:3306
   teslamate:
     image: teslamate/teslamate:1.32.0
     container_name: teslamate
