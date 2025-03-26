@@ -150,7 +150,7 @@ services:
     env_file:
       - ./secrets/foxessprom
     command:
-      - "--mqtt=mqtt"
+      - "--modbus=192.168.1.33"
 #  mythtv:
 #     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
 #     hostname: mythtv
