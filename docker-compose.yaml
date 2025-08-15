@@ -333,7 +333,7 @@ services:
       - SHELLY_HOST_SHELLYPLUGS=192.168.1.61,192.168.1.62,192.168.1.64,192.168.1.65,192.168.1.66
   actual_server:
     container_name: actual_server
-    image: docker.io/actualbudget/actual-server:25.6.1-alpine
+    image: docker.io/actualbudget/actual-server:25.8.0-alpine
     ports:
       - '5006:5006'
     environment:
