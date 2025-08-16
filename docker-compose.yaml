@@ -184,7 +184,7 @@ services:
 #    ports:
 #       - 3306:3306
   teslamate:
-    image: teslamate/teslamate:2.1.0
+    image: teslamate/teslamate:2.1.1
     container_name: teslamate
     restart: always
     environment:
