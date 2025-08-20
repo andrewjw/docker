@@ -68,7 +68,7 @@ services:
   unpoller:
     container_name: unpoller
     restart: always
-    image: golift/unifi-poller:v2.15.3
+    image: golift/unifi-poller:v2.15.4
     ports:
       - 9130/tcp
     volumes:
