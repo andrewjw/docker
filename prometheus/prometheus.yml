@@ -164,3 +164,10 @@ scrape_configs:
     static_configs:
       - targets: ['shelly:8089']
     metrics_path: /probe
+
+  - job_name: 'everybodydj'
+    scrape_interval: 30s
+    scrape_timeout: 29s
+    static_configs:
+      - targets: ['everybodydj:8000']
+    metrics_path: /metrics
