@@ -363,6 +363,16 @@ services:
       - ./secrets/everybodydj
     volumes:
       - ./everybodydj_data:/everybodydj/data
+  sonoslastfm:
+    image: sonoslastfm:latest
+    container_name: sonoslastfm
+    env_file:
+      - ./secrets/sonos-lastfm
+    volumes:
+      - ./sonos-lastfm/data:/app/data
+    restart: always  # Ensures the container restarts automatically
+    network_mode: host  # Important for Sonos discovery on the local network
+    command: ["sonos-lastfm", "run"]
 networks:
   docker_network:
     enable_ipv6: true
