@@ -216,7 +216,7 @@ services:
 #    volumes:
 #      - ./pgadmin:/var/lib/pgadmin
   teslamateagile:
-    image: mattjeanes/teslamateagile:v1.19.0
+    image: mattjeanes/teslamateagile:v1.21.0
     container_name: teslamateagile
     restart: always
     env_file:
