@@ -242,7 +242,7 @@ services:
     ports:
       - 5433:5432
   query_exporter:
-    image: adonato/query-exporter:3.2.1
+    image: adonato/query-exporter:4.0.0
     container_name: query_exporter
 #    restart: never
     ports:
