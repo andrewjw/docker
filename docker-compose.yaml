@@ -323,7 +323,7 @@ services:
       - ./secrets/house_manager
   shelly:
     container_name: shelly
-    image: webdevops/shelly-plug-exporter:25.5.0
+    image: webdevops/shelly-plug-exporter:25.12.2
     restart: always
     ports:
       - 8089:8089
