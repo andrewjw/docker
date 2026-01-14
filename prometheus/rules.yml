@@ -43,3 +43,10 @@ groups:
            title: 'No Meter Data'
         labels:
            severity: 'critical'
+      - alert: TVOnTooLong
+        expr: time() - node_boot_time_seconds{job="tv"} >= 24 * 60 * 60
+        for: 1m
+        annotations:
+           title: 'TV PC On Too Long'
+        labels:
+           severity: 'critical'
