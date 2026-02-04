@@ -1,6 +1,6 @@
 databases:
   teslamate:
-    dsn: env:CONNECTION_STRING
+    dsn: !env CONNECTION_STRING
 
 metrics:
   teslamate_home_kwh:
