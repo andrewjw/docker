@@ -373,6 +373,19 @@ services:
     restart: always  # Ensures the container restarts automatically
     network_mode: host  # Important for Sonos discovery on the local network
     command: ["sonos-lastfm", "run"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+  smartctl-exporter:
+    image: prometheuscommunity/smartctl-exporter:v0.14.0
+    container_name: smartyctl-exporter
+    restart: always
+    privileged: true
+    user: root
+    ports:
+      - "9633:9633"
 networks:
   docker_network:
     enable_ipv6: true
