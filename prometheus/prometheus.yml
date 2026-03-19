@@ -168,6 +168,14 @@ scrape_configs:
   - job_name: 'everybodydj'
     scrape_interval: 30s
     scrape_timeout: 29s
+    scheme: https
     static_configs:
-      - targets: ['everybodydj:8000']
+      - targets: ['everybodydj.com']
     metrics_path: /metrics
+
+#  - job_name: 'smartctl'
+#    scrape_interval: 300s
+#    scrape_timeout: 60s
+#    static_configs:
+#      - targets: ['smartctl-exporter:9633']
+#    metrics_path: /metrics
