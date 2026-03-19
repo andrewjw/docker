@@ -1,6 +1,10 @@
 # Note: 192.168.123.xxx is an example network, you must update all these to match your own.
 
-version: '2.1'
+x-common-logging: &common-logging
+  driver: "json-file"
+  options:
+    max-size: "100m"
+    max-file: "5"
 
 services:
   rtl_433:
@@ -41,6 +45,7 @@ services:
     volumes:
       - ../pihole/resolv.conf:/etc/resolv.conf
       - ../pihole/data:/etc/pihole
+    logging: *common-logging
   unifi:
      container_name: unifi-controller
      image: jacobalberty/unifi:v10.0.162
@@ -106,6 +111,7 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=3650d"
       - "--web.enable-admin-api"
+    logging: *common-logging
   alertmanager:
     image: prom/alertmanager:v0.31.1
     container_name: alertmanager
@@ -141,6 +147,7 @@ services:
       - 9102:9100
     env_file:
       - ./secrets/glowprom
+    logging: *common-logging
   foxessprom:
     image: andrewjw/foxessprom:2.1.0
     container_name: foxessprom
@@ -151,6 +158,7 @@ services:
       - ./secrets/foxessprom
     command:
       - "--modbus=192.168.1.33"
+    logging: *common-logging
 #  mythtv:
 #     image: instantlinux/mythtv-backend:29.1-fixes.201909121531.4c432df
 #     hostname: mythtv
@@ -201,6 +209,7 @@ services:
       - 4000:4000
     depends_on:
       - database
+    logging: *common-logging
 #  pgadmin:
 #    image: dpage/pgadmin4
 #    container_name: pgadmin
@@ -261,6 +270,7 @@ services:
       - 9103:9100
     env_file:
       - ./secrets/prom433
+    logging: *common-logging
 #  folder_size:
 #    image: "prometheus_folder_size_exporter:latest"
 #    container_name: folder_size
@@ -312,6 +322,7 @@ services:
     network_mode: host
     env_file:
       - ./secrets/smartdisplay
+    logging: *common-logging
   house_manager:
     container_name: house_manager
     image: house_manager:latest
@@ -321,6 +332,7 @@ services:
       - 6060:6060
     env_file:
       - ./secrets/house_manager
+    logging: *common-logging
   shelly:
     container_name: shelly
     image: webdevops/shelly-plug-exporter:26.1.0
@@ -331,6 +343,7 @@ services:
       - VERBOSE=1
       - SERVER_BIND=:8089
       - SHELLY_HOST_SHELLYPLUGS=192.168.1.61,192.168.1.62,192.168.1.64,192.168.1.65,192.168.1.66
+    logging: *common-logging
   actual_server:
     container_name: actual_server
     image: docker.io/actualbudget/actual-server:26.3.0-alpine
@@ -353,16 +366,7 @@ services:
       retries: 3
       start_period: 20s
     restart: unless-stopped
-  everybodydj:
-    image: everybodydj:latest
-    container_name: everybodydj
-    restart: always
-    ports:
-      - 7000:8000
-    env_file:
-      - ./secrets/everybodydj
-    volumes:
-      - ./everybodydj_data:/everybodydj/data
+    logging: *common-logging
   sonoslastfm:
     image: sonoslastfm:latest
     container_name: sonoslastfm
@@ -373,19 +377,15 @@ services:
     restart: always  # Ensures the container restarts automatically
     network_mode: host  # Important for Sonos discovery on the local network
     command: ["sonos-lastfm", "run"]
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "100m"
-        max-file: "5"
-  smartctl-exporter:
-    image: prometheuscommunity/smartctl-exporter:v0.14.0
-    container_name: smartyctl-exporter
-    restart: always
-    privileged: true
-    user: root
-    ports:
-      - "9633:9633"
+    logging: *common-logging
+#  smartctl-exporter:
+#    image: prometheuscommunity/smartctl-exporter:v0.14.0
+#    container_name: smartctl-exporter
+#    restart: always
+#    privileged: true
+#    user: root
+#    ports:
+#      - "9633:9633"
 networks:
   docker_network:
     enable_ipv6: true
