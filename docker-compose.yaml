@@ -113,7 +113,7 @@ services:
       - "--web.enable-admin-api"
     logging: *common-logging
   alertmanager:
-    image: prom/alertmanager:v0.31.1
+    image: prom/alertmanager:v0.32.0
     container_name: alertmanager
     restart: always    
     ports:
