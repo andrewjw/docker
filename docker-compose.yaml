@@ -397,7 +397,7 @@ services:
       - ./secrets/immich
     volumes:
       - /volume1/photo_immich:/data
-      - /volume1/photo:/mnt/media/photo:ro
+      - /volume1/photo:/mnt/media/photo
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '2283:2283'
