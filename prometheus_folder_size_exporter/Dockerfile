@@ -1,4 +1,4 @@
-FROM rust:1.92
+FROM rust:1.95
 
 USER root
 
