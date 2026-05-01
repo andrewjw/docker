@@ -236,8 +236,8 @@ services:
       - TeslaMate__GeofenceId=68
       - TeslaMate__EnergyProvider=FixedPrice
       - FixedPrice__TimeZone=Europe/London # IANA (tz database) time zone code, used for below times
-      - FixedPrice__Prices__0=00:30-05:30=0.065 # You can have as many as these as you need
-      - FixedPrice__Prices__1=05:30-00:30=0.28604
+      - FixedPrice__Prices__0=00:30-05:30=0.08625 # You can have as many as these as you need
+      - FixedPrice__Prices__1=05:30-00:30=0.31179
     depends_on:
       - database
   database:
@@ -408,6 +408,17 @@ services:
     logging: *common-logging
     healthcheck:
       disable: false
+
+  power-tools:
+    container_name: immich_power_tools
+    image: ghcr.io/immich-power-tools/immich-power-tools:v0.21.2
+    volumes:
+      - ./immich_power_tools:/app/data
+    ports:
+      - "2284:3000"
+    logging: *common-logging
+    env_file:
+      - ./secrets/immich_power_tools
 
   immich-machine-learning:
     container_name: immich_machine_learning
