@@ -16,6 +16,7 @@ services:
     command: "-F mqtt://mqtt:1883 -f 434.0M -f 868.5M -H 90 -M level" #-Y classic" # -s 1000k"
     volumes:
       - ./analysis:/root/analysis
+    logging: *common-logging
   pihole:
     container_name: pihole
     image: pihole/pihole:2026.04.1
