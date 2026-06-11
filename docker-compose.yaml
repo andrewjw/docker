@@ -421,22 +421,22 @@ services:
     env_file:
       - ./secrets/immich_power_tools
 
-  immich-machine-learning:
-    container_name: immich_machine_learning
+#  immich-machine-learning:
+#    container_name: immich_machine_learning
     # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
-    image: ghcr.io/immich-app/immich-machine-learning:v2.7.5
+#    image: ghcr.io/immich-app/immich-machine-learning:v2.7.5
     # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
-    volumes:
-      - ./immich_model_cache:/cache
-    env_file:
-      - ./secrets/immich
-    restart: always
-    logging: *common-logging
-    healthcheck:
-      disable: false
+#    volumes:
+#      - ./immich_model_cache:/cache
+#    env_file:
+#      - ./secrets/immich
+#    restart: always
+#    logging: *common-logging
+#    healthcheck:
+#      disable: false
 
   immich-redis:
     container_name: immich_redis
@@ -460,20 +460,20 @@ services:
     healthcheck:
       disable: false
 
-  dispatcharr:
-    image: ghcr.io/dispatcharr/dispatcharr:0.24.0
-    restart: unless-stopped
-    container_name: dispatcharr
-    ports:
-      - 9191:9191
-    volumes:
-      - ./dispatcharr_data:/data
-    environment:
-      - DISPATCHARR_ENV=aio
-      - REDIS_HOST=localhost
-      - CELERY_BROKER_URL=redis://localhost:6379/0
-      - DISPATCHARR_LOG_LEVEL=info
-    logging: *common-logging
+#  dispatcharr:
+#    image: ghcr.io/dispatcharr/dispatcharr:0.24.0
+#    restart: unless-stopped
+#    container_name: dispatcharr
+#    ports:
+#      - 9191:9191
+#    volumes:
+#      - ./dispatcharr_data:/data
+#    environment:
+#      - DISPATCHARR_ENV=aio
+#      - REDIS_HOST=localhost
+#      - CELERY_BROKER_URL=redis://localhost:6379/0
+#      - DISPATCHARR_LOG_LEVEL=info
+#    logging: *common-logging
 
 networks:
   docker_network:
