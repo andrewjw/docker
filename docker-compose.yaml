@@ -25,7 +25,7 @@ services:
     logging: *common-logging
   pihole:
     container_name: pihole
-    image: pihole/pihole:2026.04.1
+    image: pihole/pihole:2026.07.2
     restart: always
     hostname: pihole
     domainname: home.indiegigs.com             # <-- Update
