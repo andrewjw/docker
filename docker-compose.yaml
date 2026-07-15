@@ -47,30 +47,38 @@ services:
       - ../pihole/resolv.conf:/etc/resolv.conf
       - ../pihole/data:/etc/pihole
     logging: *common-logging
-  unifi:
-     container_name: unifi-controller
-     image: jacobalberty/unifi:v10.0.162
-     restart: always
-     hostname: unifi
-     domainname: home.indiegigs.com             # <-- Update
-#     cap_add:
-#       - NET_ADMIN
-#     networks:
-#      docker_network:
-#        ipv4_address: 192.168.1.4   #M-BM- <-- Update
-#     dns:
-#      - 127.0.0.1
-#      - 8.8.8.8
-     ports:
-      - 6789:6789
-      - 8080:8080
-      - 8880:8880
-      - 8443:8443
-      - 3478:3478/udp
-     volumes:
-      - ./unifi:/unifi
-     environment:
-      TZ: "Europe/London"
+  unifi-os-server:
+    image: ghcr.io/lemker/unifi-os-server:v1.3.0
+    container_name: unifi-os-server
+    cgroup: host
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    extra_hosts:
+      host.docker.internal: host-gateway
+    tmpfs:
+      - /run:exec
+      - /run/lock
+      - /tmp:exec
+      - /var/lib/journal
+      - /var/opt/unifi/tmp:size=64m
+    environment:
+      - UOS_SYSTEM_IP=192.168.1.207
+      - HARDWARE_PLATFORM=synology
+      - TZ="Europe/London"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - ./unifi-os-server/persistent:/persistent
+      - ./unifi-os-server/var-log:/var/log
+      - ./unifi-os-server/data:/data
+      - ./unifi-os-server/srv:/srv
+      - ./unifi-os-server/var-lib-unifi:/var/lib/unifi
+      - ./unifi-os-server/var-lib-mongodb:/var/lib/mongodb
+      - ./unifi-os-server/etc-rabbitmq-ssl:/etc/rabbitmq/ssl
+    ports:
+      - 11443:443
+    restart: unless-stopped
+    logging: *common-logging
   unpoller:
     container_name: unpoller
     restart: always
