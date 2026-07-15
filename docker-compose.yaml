@@ -8,14 +8,20 @@ x-common-logging: &common-logging
 
 services:
   rtl_433:
-#    image: "hertzg/rtl_433:23.11"
-    image: rtl_433_aw:latest
+    image: "hertzg/rtl_433:25.12"
     container_name: rtl_433
     restart: always
     privileged: true
-    command: "-F mqtt://mqtt:1883 -f 434.0M -f 868.5M -H 90 -M level" #-Y classic" # -s 1000k"
-    volumes:
-      - ./analysis:/root/analysis
+    command: "-F mqtt://mqtt:1883 -f 434.0M -Y autolevel -M level -M noise -d 0" #-Y classic" # -s 1000k"
+#    command: "-F mqtt://mqtt:1883 -f 868.5M -Y autolevel -M level -M noise" #-Y classic" # -s 1000k"
+    logging: *common-logging
+  rtl_868:
+    image: "hertzg/rtl_433:25.12"
+    container_name: rtl_868
+    restart: always
+    privileged: true
+    command: "-F mqtt://mqtt:1883 -F log -f 868.4M -s 250k -Y autolevel -M level -M noise -d 1" #-Y classic" # -s 1000k"
+#    command: "-F mqtt://mqtt:1883 -f 868.5M -Y autolevel -M level -M noise" #-Y classic" # -s 1000k"
     logging: *common-logging
   pihole:
     container_name: pihole
