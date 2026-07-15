@@ -87,6 +87,7 @@ services:
       - 9130/tcp
     volumes:
       - ./unpoller/up.conf:/etc/unpoller/up.conf
+    logging: *common-logging
   grafana:
     image: grafana/grafana:13.0.2
     container_name: grafana
@@ -104,6 +105,7 @@ services:
       - GF_SECURITY_DISABLE_GRAVATAR=true
     ports:
       - 3000:3000
+    logging: *common-logging
   prometheus:
     image: prom/prometheus:v3.13.1
     container_name: prometheus
@@ -131,6 +133,7 @@ services:
       - ./secrets/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
       - "--config.file=/etc/alertmanager/alertmanager.yml"
+    logging: *common-logging
   node-exporter:
     privileged: true
     image: prom/node-exporter:v1.11.1
@@ -148,6 +151,7 @@ services:
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.ignored-mount-points"
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
+    logging: *common-logging
   glowprom:
     image: andrewjw/glowprom:1.2.1
     container_name: glowprom
@@ -248,7 +252,7 @@ services:
   query_exporter:
     image: adonato/query-exporter:5.1.0
     container_name: query_exporter
-#    restart: never
+    restart: always
     ports:
       - 9560:9560
     volumes:
