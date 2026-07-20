@@ -21,3 +21,49 @@ services:
     logging: *common-logging
     healthcheck:
       disable: false
+
+  minepanel:
+    image: minepanel:latest
+#    image: ketbom/minepanel:1.11.5
+    container_name: minepanel
+    ports:
+      - "8091:8091"
+      - "3000:3000"
+    environment:
+      # Backend Configuration
+      - FRONTEND_URL=http://minecraft
+      - JWT_EXPIRES_IN=2d
+      - BASE_DIR=$PWD
+      - COMPOSE_PROJECT=
+
+      # SMTP settings
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_SECURE=false}
+      - SMTP_USER=
+      - SMTP_PASS=
+      - SMTP_FROM=
+      - PASSWORD_RESET_TOKEN_EXPIRES_IN_MINUTES=60
+
+      # Frontend Configuration (loaded at runtime)
+      - NEXT_PUBLIC_BACKEND_URL=http://minecraft:8091
+      - NEXT_PUBLIC_DEFAULT_LANGUAGE=en
+
+      # Subdirectory Routing (optional). `NEXT_PUBLIC_BASE_PATH` only changes the frontend if the image was built with the same value.
+      - BASE_PATH=
+      - NEXT_PUBLIC_BASE_PATH=
+      - BASE_DIR=/home/andrew/docker/minepanel
+    env_file:
+      - ./secrets/minepanel
+    volumes:
+      - ./minepanel/servers:/app/servers
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./minepanel/data:/app/data
+    networks:
+      - minepanel-network
+    restart: always
+
+networks:
+  minepanel-network:
+    name: minepanel-network
+    driver: bridge
