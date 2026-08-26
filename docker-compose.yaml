@@ -231,7 +231,7 @@ services:
       - database
     logging: *common-logging
   teslamateagile:
-    image: mattjeanes/teslamateagile:v1.22.0
+    image: mattjeanes/teslamateagile:v1.23.0
     container_name: teslamateagile
     restart: always
     env_file:
