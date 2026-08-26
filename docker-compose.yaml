@@ -114,7 +114,7 @@ services:
       - 3000:3000
     logging: *common-logging
   prometheus:
-    image: prom/prometheus:v3.13.1
+    image: prom/prometheus:v3.14.0
     container_name: prometheus
     restart: always
     links:
