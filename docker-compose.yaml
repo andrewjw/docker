@@ -385,7 +385,7 @@ services:
 
   power-tools:
     container_name: immich_power_tools
-    image: ghcr.io/immich-power-tools/immich-power-tools:v0.22.0
+    image: ghcr.io/immich-power-tools/immich-power-tools:v0.23.0
     volumes:
       - ./immich_power_tools:/app/data
     ports:
