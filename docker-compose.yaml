@@ -395,7 +395,7 @@ services:
       - ./secrets/immich_power_tools
   immich-redis:
     container_name: immich_redis
-    image: docker.io/valkey/valkey:9@sha256:8e8d64b405ce18f41b8e5ee20aa4687a8ed0022d1298f2ce31cdcf3a76e09411
+    image: docker.io/valkey/valkey:9@sha256:475ee65cc75c327407458f5096cdd36954b3de3fc83f4c8ac31a4a8edecbf49e
     healthcheck:
       test: redis-cli ping || exit 1
     logging: *common-logging
