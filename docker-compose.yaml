@@ -339,7 +339,7 @@ services:
     logging: *common-logging
   actual_server:
     container_name: actual_server
-    image: docker.io/actualbudget/actual-server:26.9.0-alpine
+    image: docker.io/actualbudget/actual-server:26.10.0-alpine
     ports:
       - '5006:5006'
     volumes:
