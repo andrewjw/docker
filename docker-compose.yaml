@@ -256,7 +256,7 @@ services:
       - ./mosquitto/data:/mosquitto/data
   blackbox:
     container_name: blackbox
-    image: prom/blackbox-exporter:v0.28.0
+    image: prom/blackbox-exporter:v0.29.0
     restart: always
     ports:
       - 9115:9115
