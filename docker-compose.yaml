@@ -286,7 +286,7 @@ services:
     logging: *common-logging
   shelly:
     container_name: shelly
-    image: webdevops/shelly-plug-exporter:26.9.3
+    image: webdevops/shelly-plug-exporter:26.10.0
     network_mode: host
     restart: always
 #    ports:
