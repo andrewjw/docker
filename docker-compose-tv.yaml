@@ -17,6 +17,8 @@ services:
       - ./immich_model_cache:/cache
     env_file:
       - ./secrets/immich
+    ports:
+      - 3003:3003
     restart: always
     logging: *common-logging
     healthcheck:
