@@ -127,7 +127,7 @@ services:
       - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1/@docker)($$|/)"
     logging: *common-logging
   glowprom:
-    image: andrewjw/glowprom:1.2.1
+    image: andrewjw/glowprom:2.0.0
     container_name: glowprom
     restart: always
     ports:
