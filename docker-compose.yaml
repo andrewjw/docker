@@ -136,7 +136,7 @@ services:
       - ./secrets/glowprom
     logging: *common-logging
   foxessprom:
-    image: andrewjw/foxessprom:3.0.0
+    image: andrewjw/foxessprom:3.0.1
     container_name: foxessprom
     restart: always
     ports:
